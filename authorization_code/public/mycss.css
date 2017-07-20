@@ -1,0 +1,39 @@
+html {
+	font-family: Arial, sans-serif;
+}
+
+body {
+	background-color: #191414;
+	color: #FFF;
+	font-size: 18px;
+}
+
+select {
+	color: #000;
+}			
+
+a {
+	color: #1DB954;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #1DB954;
+	text-decoration :underline;
+}
+
+pre {
+	background-color: #191414;
+	border-color: #1DB954;
+	color: white;
+	font-size: 18px;
+}
+
+#mytopArtist, #mytopTrack, #title, #time-select, #sign-out, #create-playlist{
+	color: #1DB954;
+}
+
+.spotify_icon {
+	max-width: 150px;
+	float: right;
+}
