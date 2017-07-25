@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>My Spotify Top 50</title>
+    <title>MyTop50</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="mycss.css">
     <style type="text/css">
@@ -27,8 +27,10 @@
               $('#sign-out').hide();
               ">sign-out</button>
       <div id="login">
-        <h1>Welcome to MyTop50, sign in with your spotify account to continue</h1>
+        <h1>Welcome to MyTop50, sign in with your Spotify account to continue</h1>
+<!--
         <dl>Disclaimer: by logging in your agree to follow my playlist</dl>
+-->
         <a href="/login" class="btn btn-primary">Log in with Spotify</a>
       </div>
       <div id="loggedin">
@@ -114,6 +116,7 @@
           }
           return hashParams;
         }
+        //handlebar functions for parsing api results on front end
 		Handlebars.registerHelper('each', function(context) {
 			var ret = "Your top 50 songs based on your listening habits\n";
 			var num=0;
@@ -133,12 +136,7 @@
 			}
 			return ret;
 		});
-		
-		function comparator(a, b) {
-			return   parseInt(b.popularity, 10) - parseInt(a.popularity, 10);
-		}
-
-		
+			
         Handlebars.registerHelper('singleName', function(context) {
 			console.log(context);
 		var ret =  context[0].name;
@@ -149,13 +147,7 @@
 			return ret;	
 		});        
 		
-		
-        function parse(result) {
-			for (var i = 0; i < result.length; i++) { 
-				return result[i];
-		}
-		};
-
+		//handlebar template setup
         var userProfileSource = document.getElementById('user-profile-template').innerHTML,
             userProfileTemplate = Handlebars.compile(userProfileSource),
             userProfilePlaceholder = document.getElementById('user-profile');
@@ -190,107 +182,55 @@
 			//profile api call
             $.ajax({
                 url: 'https://api.spotify.com/v1/me',
-                headers: {
-                  'Authorization': 'Bearer ' + access_token
-                },
-                success: function(response) {
-                  userProfilePlaceholder.innerHTML = userProfileTemplate(response);
-                }
+                headers: {'Authorization': 'Bearer ' + access_token},
+                success: function(response) {userProfilePlaceholder.innerHTML = userProfileTemplate(response);}
             });
             //single artist call
             $.ajax({
                 url: 'https://api.spotify.com/v1/me/top/artists?limit=1&time_range=long_term',
-                headers: {
-                  'Authorization': 'Bearer ' + access_token
-                },
-                success: function(response) {
-                  artistPlaceholder.innerHTML = artistTemplate(response);
-	
-                }
+                headers: {'Authorization': 'Bearer ' + access_token},
+                success: function(response) { artistPlaceholder.innerHTML = artistTemplate(response);}
             }); 
             //single track call
             $.ajax({
                 url: 'https://api.spotify.com/v1/me/top/tracks?limit=1&time_range=long_term',
-                headers: {
-                  'Authorization': 'Bearer ' + access_token
-                },
-                success: function(response) {
-                  trackPlaceholder.innerHTML = trackTemplate(response);
-				
-     
-                }
+                headers: {'Authorization': 'Bearer ' + access_token},
+                success: function(response) {trackPlaceholder.innerHTML = trackTemplate(response);}
             }); 
             //short,medium,long term track calls
              $.ajax({
                 url: 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50',
-                headers: {
-                  'Authorization': 'Bearer ' + access_token
-                },
-                success: function(response) {
-                  tracklistPlaceholder.innerHTML = tracklistTemplate(response);
-                 
-                }
+                headers: {'Authorization': 'Bearer ' + access_token},
+                success: function(response) {tracklistPlaceholder.innerHTML = tracklistTemplate(response);}
             }); 
             $.ajax({
                 url: 'https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=50',
-                headers: {
-                  'Authorization': 'Bearer ' + access_token
-                },
-                success: function(response) {
- 
-				  document.getElementById('track-list-all-time').innerHTML=tracklistTemplate(response);
-
-				                  
-                }
+                headers: {'Authorization': 'Bearer ' + access_token},
+                success: function(response) {document.getElementById('track-list-all-time').innerHTML=tracklistTemplate(response);}
             }); 
-          
-          
             $.ajax({
                 url: 'https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=50',
-                headers: {
-                  'Authorization': 'Bearer ' + access_token
-                },
-                success: function(response) {
- 
-				  document.getElementById('track-list-medium-time').innerHTML=tracklistTemplate(response);
-
-			  }})
+                headers: {'Authorization': 'Bearer ' + access_token},
+                success: function(response) {document.getElementById('track-list-medium-time').innerHTML=tracklistTemplate(response);} 
+			});
+			  
 			  //short,medium, long artist calls
 			$.ajax({
                 url: 'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=10',
-                headers: {
-                  'Authorization': 'Bearer ' + access_token
-                },
-                success: function(response) {
-                  artistlistPlaceholder.innerHTML = artistlistTemplate(response);
-                 
-                }
+                headers: {'Authorization': 'Bearer ' + access_token},
+                success: function(response) {artistlistPlaceholder.innerHTML = artistlistTemplate(response);}
             }); 
             $.ajax({
                 url: 'https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=10',
-                headers: {
-                  'Authorization': 'Bearer ' + access_token
-                },
-                success: function(response) {
- 
-				  document.getElementById('artist-list-all-time').innerHTML=artistlistTemplate(response);
-
-				                  
-                }
+                headers: {'Authorization': 'Bearer ' + access_token},
+                success: function(response) {document.getElementById('artist-list-all-time').innerHTML=artistlistTemplate(response);}
             }); 
-          
-          
             $.ajax({
                 url: 'https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=10',
-                headers: {
-                  'Authorization': 'Bearer ' + access_token
-                },
-                success: function(response) {
- 
-				  document.getElementById('artist-list-medium-time').innerHTML=artistlistTemplate(response);
-
-			  }})
-			  
+                headers: {'Authorization': 'Bearer ' + access_token},
+                success: function(response) {document.getElementById('artist-list-medium-time').innerHTML=artistlistTemplate(response);}
+			});
+			  //hide/show elements for the correct page
 			$('#login').hide();
             $('#loggedin').show();
 			$('#lists-long').hide();
@@ -306,32 +246,24 @@
               $('#time-select').hide();
               $('#create-playlist').hide();
               $('#sign-out').hide();
-              
-              
-
-	  }
-	  
+            }
+	  //create playlist on button click, make a backend call
 	  document.getElementById('create-playlist').addEventListener('click', function() {
-		 
 		  alert("Playlist has been created")
-            $.ajax({
-              url: '/create_playlist',
-              data: {
+		  //pass user id, time period, refresh token
+          $.ajax({
+				url: '/create_playlist',
+				data: {
                 'refresh_token': refresh_token,
                 time_period : document.getElementById("time_range").value,
                 id: document.getElementById('user_id').innerHTML
-              }
-            }).done(function(data) {
-              access_token = data.access_token;
-              
-            });
-            
-          }, false);
+                }
+            }).done(function(data) { access_token = data.access_token;  }); //set access token to the new token obtained with the refresh token
+          
+      }, false);
 	  
-	  }
-
-
-      })();
+	 
+	  }})();
     </script>
   </body>
 </html>

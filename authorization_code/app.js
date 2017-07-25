@@ -43,7 +43,7 @@ app.get('/login', function(req, res) {
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  // your application requests authorization
+  //requests authorization
   var scope = 'user-top-read user-read-private user-read-email';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
@@ -58,7 +58,7 @@ app.get('/login', function(req, res) {
 
 app.get('/callback', function(req, res) {
 
-  // your application requests refresh and access tokens
+  // requests refresh and access tokens
   // after checking the state parameter
 
   var code = req.query.code || null;
@@ -91,34 +91,7 @@ app.get('/callback', function(req, res) {
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
 
-        var options = {
-          url: 'https://api.spotify.com/v1/me',
-          headers: { 'Authorization': 'Bearer ' + access_token },
-          json: true
-        };
-
-        //~ // use the access token to access the Spotify Web API
-        request.get(options, function(error, response, body) {
-
-          //~ console.log(body);
-          //~ console.log(body.items[0])
-        });
-        
-        //request top artist
-        var artists = {
-          url: 'https://api.spotify.com/v1/me/top/artists?limit=5',
-          headers: { 'Authorization': 'Bearer ' + access_token },
-          json: true
-        };
-       
-        request.get(artists, function(error, response, body) {
-          //~ console.log("\n")
-          //~ console.log(body);
-          //~ $("#topArtist").text(body.items[0].name);
-        });
-        
-
-        // we can also pass the token to the browser to make requests from there
+        // we pass the token to the browser to make requests from there
         res.redirect('/#' +
           querystring.stringify({
             access_token: access_token,
@@ -134,6 +107,7 @@ app.get('/callback', function(req, res) {
   }
 });
 
+//call to create a playlist on the user profile
 app.get('/create_playlist', function(req, res) {
 	console.log('create playlist')
 
@@ -152,25 +126,25 @@ app.get('/create_playlist', function(req, res) {
 
   request.post(authOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
+		
       var access_token = body.access_token;
       var time_period= req.query.time_period;
+      //get top 50 tracks with user specified time range
       var tracks = {
           url: 'https://api.spotify.com/v1/me/top/tracks?time_range='+time_period+'&limit=50',
           headers: { 'Authorization': 'Bearer ' + access_token },
           json: true
         };
-		
-        request.get(tracks, function(error, response, body) {
-			
-         var my_tracks=[];
-         //create list of tracks
-         for (var i = 0; i < body.items.length; i++) {
+      request.get(tracks, function(error, response, body) {
+		//create list of tracks	
+        var my_tracks=[];
+        for (var i = 0; i < body.items.length; i++) {
 			my_tracks.push(body.items[i].uri);
-			}
-			
+	    }
+		//get user id from request	
 		var id=req.query.id
 		var playlist_name={'short_term': 'month', 'medium_term':'six months', 'long_term':'millenia'}
-		//for and request empy playlist
+		//form and request empy playlist
 		var empty_playlist = {
           url: 'https://api.spotify.com/v1/users/'+id+'/playlists',
           headers: { 'Authorization': 'Bearer ' + access_token },
@@ -179,19 +153,17 @@ app.get('/create_playlist', function(req, res) {
         };
         request.post(empty_playlist, function(error, response, body) {
 			playlist_id=body.id;
-			
 			//ADd tracks to playlist
 			var add_tracks = {
-          url: 'https://api.spotify.com/v1/users/'+id+'/playlists/'+playlist_id+'/tracks',
-          headers: { 'Authorization': 'Bearer ' + access_token },
-          body: JSON.stringify({uris: my_tracks}),
-          json: true,
-          'Content-Type': 'application/json'
-        };
+				url: 'https://api.spotify.com/v1/users/'+id+'/playlists/'+playlist_id+'/tracks',
+				headers: { 'Authorization': 'Bearer ' + access_token },
+				body: JSON.stringify({uris: my_tracks}),
+				json: true,
+				'Content-Type': 'application/json'
+				};
 			request.post(add_tracks, function(error, response, body) {		console.log(body);	});
 		});
-	
-        });
+      });
 
       //send response
       res.send({
