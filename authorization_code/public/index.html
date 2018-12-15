@@ -40,10 +40,10 @@
         <div id="track-display"></div>
 	      </div>
 	    <div id="time-select"> <span> Your Top 50 songs and Top 10 artists this last </span>
-			<select id="time_range" name="time_range" onchange="SelectElement(this.value)" >
-				<option value="short_term" onclick="$('#lists-long').hide();$('#lists-medium').hide();$('#lists-short').show();">Month</option>
-				<option value="medium_term" onclick="$('#lists-short').hide();$('#lists-long').hide();$('#lists-medium').show();";>Six Months</option>
-				<option value="long_term" onclick="$('#lists-short').hide();$('#lists-medium').hide();$('#lists-long').show(); ">Millenia</option>
+			<select id="time_range" name="time_range" onchange="" >
+				<option value="short_term">Month</option>
+				<option value="medium_term" >Six Months</option>
+				<option value="long_term" >Millenia</option>
 			</select>
 		</div>
 		<button class="btn btn-default" id="create-playlist">Create the current playlist</button>
@@ -263,7 +263,14 @@
       }, false);
 	  
 	 
-	  }})();
+    }})();
+    
+    document.getElementById('time_range').addEventListener('change', function() {
+      var match= {'long_term':'lists-long','medium_term':'lists-medium','short_term':'lists-short'};
+      $('#lists-short').hide();$('#lists-medium').hide();$('#lists-long').hide(); 
+      $('#'+match[document.getElementById('time_range').value]).show();   
+      return 0;
+	  })();
     </script>
   </body>
 </html>
