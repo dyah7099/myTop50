@@ -12,6 +12,11 @@ Once installed, clone the repository and install its dependencies running:
 
     $ npm install
 
+## Edit the config file
+edit config/default.json
+    get the client_id and client_secret from the spotify developer page
+    set the host localhost:8888 or the hosted url
+
 ## Running the app
 
     $ cd authorization_code
