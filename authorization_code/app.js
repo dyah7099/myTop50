@@ -11,10 +11,12 @@ var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+var config = require('config');
 
-var client_id = 'd11cbc40c5494ddfa696f399276c89aa'; // Your client id
-var client_secret = 'b7f8135aa1f74b2aa0f45e029ceaa2a9'; // Your secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+
+var client_id = config.get('client_id') // Your client id
+var client_secret = config.get('client_secret'); // Your secret
+var redirect_uri = 'http://' + config.get('host')+'/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
