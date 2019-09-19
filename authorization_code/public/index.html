@@ -44,7 +44,11 @@
         <option value="long_term">Millenia</option>
       </select>
     </div>
-    <button class="btn btn-default" id="create-playlist">Create the current playlist</button>
+    <button class="btn btn-default" id="create-playlist">Create Current Playlist</button>
+    <form>
+      Playlist Name:<br>
+      <input id="playlist-name" type="text" name="playlist-name" placeholder="My Top 50 this Month"><br>
+    </form>
     <div id="lists">
       <div id="lists-short">
         <div id="track-list"></div>
@@ -116,7 +120,7 @@
         return hashParams;
       }
 
-      function renderLogin(){
+      function renderLogin() {
         $('#login').show();
         $('#loggedin').hide();
         $('#lists').hide();
@@ -146,7 +150,6 @@
       });
 
       Handlebars.registerHelper('singleName', function (context) {
-        console.log(context);
         var ret = context[0].name;
         return ret;
       });
@@ -261,7 +264,8 @@
             data: {
               'refresh_token': refresh_token,
               time_period: document.getElementById("time_range").value,
-              id: document.getElementById('user_id').innerHTML
+              id: document.getElementById('user_id').innerHTML,
+              name: document.getElementById("playlist-name").value
             }
           }).done(function (data) { access_token = data.access_token; }); //set access token to the new token obtained with the refresh token
 
@@ -272,9 +276,12 @@
     })();
 
     document.getElementById('time_range').addEventListener('change', function () {
+      var time_range = document.getElementById('time_range').value;
+      var playlist_name_map = { 'short_term': 'Month', 'medium_term': 'Six months', 'long_term': 'Millenia' }
       var match = { 'long_term': 'lists-long', 'medium_term': 'lists-medium', 'short_term': 'lists-short' };
       $('#lists-short').hide(); $('#lists-medium').hide(); $('#lists-long').hide();
-      $('#' + match[document.getElementById('time_range').value]).show();
+      $('#playlist-name').attr("placeholder", "My Top 50 this "+playlist_name_map[time_range]);
+      $('#' + match[time_range]).show();
       return 0;
     })();
   </script>

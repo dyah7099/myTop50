@@ -111,7 +111,6 @@ app.get('/callback', function (req, res) {
 //call to create a playlist on the user profile
 app.get('/create_playlist', function (req, res) {
   console.log('create playlist')
-
   // requesting access token from refresh token
   var refresh_token = req.query.refresh_token;
 
@@ -144,12 +143,21 @@ app.get('/create_playlist', function (req, res) {
         }
         //get user id from request	
         var id = req.query.id
-        var playlist_name = { 'short_term': 'month', 'medium_term': 'six months', 'long_term': 'millenia' }
-        //form and request empy playlist
+        var playlist_name_map = { 'short_term': 'Month', 'medium_term': 'Six Months', 'long_term': 'Millenia' }
+        
+        //decide on playlist name
+        var playlist_name = ""
+        if(req.query.name ==="" || req.query.name == null ){
+          playlist_name = "My Top 50 this " + playlist_name_map[time_period]          
+        }else{
+          playlist_name = req.query.name
+        }
+
+        //form and request empty playlist
         var empty_playlist = {
           url: 'https://api.spotify.com/v1/users/' + id + '/playlists',
           headers: { 'Authorization': 'Bearer ' + access_token },
-          body: JSON.stringify({ name: "My Top 50 this " + playlist_name[time_period] }),
+          body: JSON.stringify({ name: playlist_name }),
           json: true
         };
         request.post(empty_playlist, function (error, response, body) {
