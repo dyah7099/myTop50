@@ -16,14 +16,14 @@ var config = require('config');
 
 var client_id = config.get('client_id') // Your client id
 var client_secret = config.get('client_secret'); // Your secret
-var redirect_uri = 'http://' + config.get('host')+'/callback'; // Your redirect uri
+var redirect_uri = 'http://' + config.get('host') + '/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
  * @return {string} The generated string
  */
-var generateRandomString = function(length) {
+var generateRandomString = function (length) {
   var text = '';
   var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -38,9 +38,9 @@ var stateKey = 'spotify_auth_state';
 var app = express();
 
 app.use(express.static(__dirname + '/public'))
-   .use(cookieParser());
+  .use(cookieParser());
 
-app.get('/login', function(req, res) {
+app.get('/login', function (req, res) {
 
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
@@ -58,7 +58,7 @@ app.get('/login', function(req, res) {
     }));
 });
 
-app.get('/callback', function(req, res) {
+app.get('/callback', function (req, res) {
 
   // requests refresh and access tokens
   // after checking the state parameter
@@ -66,7 +66,6 @@ app.get('/callback', function(req, res) {
   var code = req.query.code || null;
   var state = req.query.state || null;
   var storedState = req.cookies ? req.cookies[stateKey] : null;
-
   if (state === null || state !== storedState) {
     res.redirect('/#' +
       querystring.stringify({
@@ -87,11 +86,11 @@ app.get('/callback', function(req, res) {
       json: true
     };
 
-    request.post(authOptions, function(error, response, body) {
+    request.post(authOptions, function (error, response, body) {
       if (!error && response.statusCode === 200) {
 
         var access_token = body.access_token,
-            refresh_token = body.refresh_token;
+          refresh_token = body.refresh_token;
 
         // we pass the token to the browser to make requests from there
         res.redirect('/#' +
@@ -110,12 +109,12 @@ app.get('/callback', function(req, res) {
 });
 
 //call to create a playlist on the user profile
-app.get('/create_playlist', function(req, res) {
-	console.log('create playlist')
+app.get('/create_playlist', function (req, res) {
+  console.log('create playlist')
 
   // requesting access token from refresh token
   var refresh_token = req.query.refresh_token;
-  
+
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
@@ -126,45 +125,45 @@ app.get('/create_playlist', function(req, res) {
     json: true
   };
 
-  request.post(authOptions, function(error, response, body) {
+  request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-		
+
       var access_token = body.access_token;
-      var time_period= req.query.time_period;
+      var time_period = req.query.time_period;
       //get top 50 tracks with user specified time range
       var tracks = {
-          url: 'https://api.spotify.com/v1/me/top/tracks?time_range='+time_period+'&limit=50',
-          headers: { 'Authorization': 'Bearer ' + access_token },
-          json: true
-        };
-      request.get(tracks, function(error, response, body) {
-		//create list of tracks	
-        var my_tracks=[];
+        url: 'https://api.spotify.com/v1/me/top/tracks?time_range=' + time_period + '&limit=50',
+        headers: { 'Authorization': 'Bearer ' + access_token },
+        json: true
+      };
+      request.get(tracks, function (error, response, body) {
+        //create list of tracks	
+        var my_tracks = [];
         for (var i = 0; i < body.items.length; i++) {
-			my_tracks.push(body.items[i].uri);
-	    }
-		//get user id from request	
-		var id=req.query.id
-		var playlist_name={'short_term': 'month', 'medium_term':'six months', 'long_term':'millenia'}
-		//form and request empy playlist
-		var empty_playlist = {
-          url: 'https://api.spotify.com/v1/users/'+id+'/playlists',
+          my_tracks.push(body.items[i].uri);
+        }
+        //get user id from request	
+        var id = req.query.id
+        var playlist_name = { 'short_term': 'month', 'medium_term': 'six months', 'long_term': 'millenia' }
+        //form and request empy playlist
+        var empty_playlist = {
+          url: 'https://api.spotify.com/v1/users/' + id + '/playlists',
           headers: { 'Authorization': 'Bearer ' + access_token },
-          body: JSON.stringify({name: "My Top 50 this "+playlist_name[time_period]}),
+          body: JSON.stringify({ name: "My Top 50 this " + playlist_name[time_period] }),
           json: true
         };
-        request.post(empty_playlist, function(error, response, body) {
-			playlist_id=body.id;
-			//ADd tracks to playlist
-			var add_tracks = {
-				url: 'https://api.spotify.com/v1/users/'+id+'/playlists/'+playlist_id+'/tracks',
-				headers: { 'Authorization': 'Bearer ' + access_token },
-				body: JSON.stringify({uris: my_tracks}),
-				json: true,
-				'Content-Type': 'application/json'
-				};
-			request.post(add_tracks, function(error, response, body) {		console.log(body);	});
-		});
+        request.post(empty_playlist, function (error, response, body) {
+          playlist_id = body.id;
+          //ADd tracks to playlist
+          var add_tracks = {
+            url: 'https://api.spotify.com/v1/users/' + id + '/playlists/' + playlist_id + '/tracks',
+            headers: { 'Authorization': 'Bearer ' + access_token },
+            body: JSON.stringify({ uris: my_tracks }),
+            json: true,
+            'Content-Type': 'application/json'
+          };
+          request.post(add_tracks, function (error, response, body) { console.log(body); });
+        });
       });
 
       //send response
