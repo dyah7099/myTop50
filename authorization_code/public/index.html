@@ -21,7 +21,7 @@
 </head>
 
 <body>
-  <div class="container">
+  <div class="container" style="padding:12px">
     <a href="http://top50forall.com/">
       <button id="sign-out">sign-out</button> </a>
     <div id="login">
@@ -73,7 +73,6 @@
             <dt>Id</dt><dd id= 'user_id'>{{id}}</dd>
             <dt>Email</dt><dd>{{email}}</dd>
             <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
-
             <dt>Country</dt><dd>{{country}}</dd>
           </dl>
         </div>
@@ -115,6 +114,15 @@
           hashParams[e[1]] = decodeURIComponent(e[2]);
         }
         return hashParams;
+      }
+
+      function renderLogin(){
+        $('#login').show();
+        $('#loggedin').hide();
+        $('#lists').hide();
+        $('#time-select').hide();
+        $('#create-playlist').hide();
+        $('#sign-out').hide();
       }
       //handlebar functions for parsing api results on front end
       Handlebars.registerHelper('each', function (context) {
@@ -176,7 +184,9 @@
         error = params.error;
 
       if (error) {
-        alert('There was an error during the authentication');
+        // render initial screen
+        renderLogin();
+
       } else {
         if (access_token) {
           //profile api call
@@ -240,12 +250,7 @@
         } else {
 
           // render initial screen
-          $('#login').show();
-          $('#loggedin').hide();
-          $('#lists').hide();
-          $('#time-select').hide();
-          $('#create-playlist').hide();
-          $('#sign-out').hide();
+          renderLogin();
         }
         //create playlist on button click, make a backend call
         document.getElementById('create-playlist').addEventListener('click', function () {
