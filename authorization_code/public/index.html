@@ -21,7 +21,7 @@
 </head>
 
 <body>
-  <div class="container" style="padding:12px">
+  <div class="container">
     <a href="http://top50forall.com/">
       <button id="sign-out">sign-out</button> </a>
     <div id="login">
@@ -37,17 +37,17 @@
       <div id="artist-display"></div>
       <div id="track-display"></div>
     </div>
-    <div id="time-select"> <span> Your Top 50 songs and Top 10 artists this last </span>
+    <div id="time-select"> <span> Your Top 50 Songs and Top 10 Artists the Last </span>
       <select id="time_range" name="time_range" onchange="">
         <option value="short_term">Month</option>
         <option value="medium_term">Six Months</option>
         <option value="long_term">Millenia</option>
       </select>
     </div>
-    <button class="btn btn-default" id="create-playlist">Create Current Playlist</button>
-    <form>
-      Playlist Name:<br>
-      <input id="playlist-name" type="text" name="playlist-name" placeholder="My Top 50 this Month"><br>
+
+    <form id="create-playlist-form" class="form">
+      <button class="btn btn-default" id="create-playlist">Create Current Playlist Named: </button>
+      <input id="playlist-name" type="text" name="playlist-name" placeholder="My Top 50 this Month">
     </form>
     <div id="lists">
       <div id="lists-short">
@@ -74,7 +74,7 @@
         <div class="media-body">
           <dl class="dl-horizontal">
             <dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
-            <dt>Id</dt><dd id= 'user_id'>{{id}}</dd>
+            <dt>Spotify Id</dt><dd id= 'user_id'>{{id}}</dd>
             <dt>Email</dt><dd>{{email}}</dd>
             <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
             <dt>Country</dt><dd>{{country}}</dd>
@@ -125,7 +125,7 @@
         $('#loggedin').hide();
         $('#lists').hide();
         $('#time-select').hide();
-        $('#create-playlist').hide();
+        $('#create-playlist-form').hide();
         $('#sign-out').hide();
       }
       //handlebar functions for parsing api results on front end
@@ -248,7 +248,7 @@
           $('#loggedin').show();
           $('#lists-long').hide();
           $('#lists-medium').hide();
-          $('#create-playlist').show();
+          $('#create-playlist-form').show();
 
         } else {
 
@@ -280,7 +280,7 @@
       var playlist_name_map = { 'short_term': 'Month', 'medium_term': 'Six months', 'long_term': 'Millenia' }
       var match = { 'long_term': 'lists-long', 'medium_term': 'lists-medium', 'short_term': 'lists-short' };
       $('#lists-short').hide(); $('#lists-medium').hide(); $('#lists-long').hide();
-      $('#playlist-name').attr("placeholder", "My Top 50 this "+playlist_name_map[time_range]);
+      $('#playlist-name').attr("placeholder", "My Top 50 this " + playlist_name_map[time_range]);
       $('#' + match[time_range]).show();
       return 0;
     })();

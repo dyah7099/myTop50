@@ -10,7 +10,13 @@ body {
 
 select {
 	color: #000;
-}			
+	border-radius: 4px;
+}
+
+input {
+	border-radius: 4px;
+	padding-bottom: 4px;
+}
 
 a {
 	color: #1DB954;
@@ -19,7 +25,7 @@ a {
 
 a:hover {
 	color: #1DB954;
-	text-decoration :underline;
+	text-decoration: underline;
 }
 
 pre {
@@ -29,7 +35,16 @@ pre {
 	font-size: 18px;
 }
 
-#mytopArtist, #mytopTrack, #title, #time-select, #sign-out, #create-playlist, #playlist-name{
+.form {
+	padding-top: 9px;
+	padding-bottom: 6px;
+}
+
+.container {
+	padding: 12px;
+}
+
+#mytopArtist, #mytopTrack, #title, #time-select, #sign-out, #create-playlist, #playlist-name {
 	color: #1DB954;
 }
 
