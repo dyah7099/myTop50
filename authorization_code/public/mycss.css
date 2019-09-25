@@ -44,6 +44,25 @@ pre {
 	padding: 12px;
 }
 
+#welcome {
+	width:66%
+}
+
+.greenText {
+	color: #1DB954;
+}
+
+.devLink {
+	font-size: 30px;
+	padding-right: 48px;
+}
+
+#bioPic {
+	width:150px;
+	text-align: right;
+	margin:18px; 
+}
+
 #mytopArtist, #mytopTrack, #title, #time-select, #sign-out, #create-playlist, #playlist-name {
 	color: #1DB954;
 }

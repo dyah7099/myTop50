@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>MyTop50</title>
+  <title>Top 50 For All</title>
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="mycss.css">
   <style type="text/css">
@@ -24,13 +24,42 @@
   <div class="container">
     <a href="http://top50forall.com/">
       <button id="sign-out">sign-out</button> </a>
+
     <div id="login">
-      <h1>Welcome to MyTop50, sign in with your Spotify account to continue</h1>
-      <!--
-        <dl>Disclaimer: by logging in your agree to follow my playlist</dl>
--->
+      <h2 id="welcome">Welcome to <a class="greenText">Top 50 For All</a>, sign in with your Spotify account to begin
+        viewing your listening
+        habits.</h2>
       <a href="/login" class="btn btn-primary">Log in with Spotify</a>
+      <hr>
+
+      <h3 class="greenText">About Top 50 For All</h3>
+      <p>This page began in 2017 as a hackathon project. It is open source and available here:
+        <a href="https://github.com/dyah7099/myTop50">Github Project</a></p>
+      <div style="width:66%">
+        <p>The main function of the page is to make use of Spotify's API to allow users to view data that may be of
+          interest that is not already readily available in the app. </p>
+        <p>The server is hosted on an AWS EC2 instance. The back end of the app is written in javascript and
+          uses nodejs. Front End functionality for the page is implemented with jQuery and Ajax.</p>
+      </div>
+      <hr>
+      <div style="display: inline">
+        <div style="width:66%; display: inline-block; float:left;">
+          <h2 class="greenText">About the Developer</h3>
+            <p>My Name is Dylan Ahearn. I graduated from the University of Colorado, Boulder in 2018 with a Bachelors
+              degree
+              in
+              Computer Science. Since graduating I have been slinging code as a software developer at SpaceNav. I
+              developed and hosted this page on my own for my own enjoyment and the enjoyment of others.</p>
+            <a class="devLink" href="https://linkedin.com/in/dylan-ahearn-cu">LinkedIn</a>
+            <a class="devLink" href="https://github.com/dyah7099">Github</a> <br>
+            <a class="devLink" href="spotify:playlist:6O9i5IHzSSHE6hS8P1WHKS">Checkout my personal Top 50 Playlist
+              Here</a>
+        </div>
+        <div style="width:30%;display: inline-block;"><img id="bioPic" src="bioPic.jpg"> </div>
+
+      </div>
     </div>
+
     <div id="loggedin">
       <img class="spotify_icon" src="spotify_icon.png">
       <div id="user-profile"></div>
